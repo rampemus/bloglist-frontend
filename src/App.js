@@ -1,31 +1,44 @@
-import React from 'react';
-// import logo from './logo.svg';
-// import './App.css';
+import React, { useState } from 'react'
 
-//TODO: form for login
 //TODO: after login show blogs
 //TODO: logging permanent and logout option
 //TODO: login gives user feedback
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        {/* <img src={logo} className="App-logo" alt="logo" /> */}
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const [username, setUsername] = useState('')
+
+    const [password, setPassword] = useState('')
+
+    const handleLogin = (event) => {
+        event.preventDefault()
+        console.log('logging event',username, password)
+    }
+
+    return (
+        <div className="App">
+            <form onSubmit={handleLogin}>
+                <div>
+                    username <input
+                        type='text'
+                        value={username}
+                        name='Username'
+                        onChange={
+                            ({ target }) => setUsername(target.value)
+                        }
+                    />
+                </div>
+                <div>
+                    password <input
+                        type='password'
+                        value={password}
+                        name='Password'
+                        onChange={({ target }) => setPassword(target.value)}
+                    />
+                </div>
+                <button type='submit'>login</button>
+            </form>
+        </div>
+    )
 }
 
-export default App;
+export default App
