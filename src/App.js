@@ -21,13 +21,24 @@ function App(props) {
             })
     },[])
 
-    const handleLogin = async(event) => {
+    useEffect(()=>{
+        const loggedUserJSON = window.localStorage.getItem('loggedBlogsUser')
+        if (loggedUserJSON) {
+            const user = JSON.parse(loggedUserJSON)
+            setUser(user)
+        }
+    },[])
+
+    const handleLogin = (event) => {
         event.preventDefault()
-        // console.log('logging event',username, password)
 
         loginService.login(username,password)
             .then(response => {
                 console.log(response)
+
+                window.localStorage.setItem(
+                    'loggedBlogsUser', JSON.stringify(response)
+                )
                 setUser(response)
                 setUsername('')
                 setPassword('')
@@ -37,6 +48,14 @@ function App(props) {
                 console.log(error)
                 setNotification({ message: 'wrong credentials', error:true })
             })
+    }
+
+    const handleLogout = (event) => {
+        event.preventDefault()
+
+        window.localStorage.removeItem('loggedBlogsUser')
+        setUser(null)
+
     }
 
     const loginForm = () => (
@@ -80,7 +99,7 @@ function App(props) {
             <div className="App">
                 <h2>blogs</h2>
                 {notificationText()}
-                <p>{user.name} logged in</p>
+                <p>{user.name} logged in <button onClick={handleLogout} type='logout'>logout</button></p>
                 {blogs.length > 0 && blogsPreview()}
             </div>
         )
