@@ -1,35 +1,43 @@
 import React, { useState, useEffect } from 'react'
 import loginService from './services/login'
+import blogsService from './services/blogs'
 
-//TODO: after login show blogs
-//TODO: logging permanent and logout option
+//TODO: logging permanent and logout option så callad: Tee kirjautumisesta "pysyvä" local storagen avulla
 //TODO: login gives user feedback
 
-function App() {
+function App(props) {
+
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [user, setUser] = useState(null)
+    const [blogs, setBlogs] = useState([])
     const [notification, setNotification] = useState({ message: 'no notifications', error:false })
+
+    useEffect(()=>{
+        blogsService.getAll()
+            .then(response => {
+                setBlogs(response)
+                console.log('data:',response)
+            })
+    },[])
 
     const handleLogin = async(event) => {
         event.preventDefault()
-        console.log('logging event',username, password)
+        // console.log('logging event',username, password)
 
-        try {
-            const userData = await loginService.login(username,password)
-            setUser(userData)
-            setUsername('')
-            setPassword('')
-            setNotification({ message: 'logged in succesfully', error:false })
-        } catch (exception) {
-            setNotification({ message: 'wrong credentials', error:true })
-        }
-
+        loginService.login(username,password)
+            .then(response => {
+                console.log(response)
+                setUser(response)
+                setUsername('')
+                setPassword('')
+                setNotification({ message: '', error:false })
+            })
+            .catch(error => {
+                console.log(error)
+                setNotification({ message: 'wrong credentials', error:true })
+            })
     }
-
-    // userEffect(()=>{
-    //
-    // },[user])
 
     const loginForm = () => (
             <form onSubmit={handleLogin}>
@@ -59,12 +67,21 @@ function App() {
         <p style={notification.error ? {color: 'red'} : {color: 'green'}}>{notification.message}</p>
     )
 
+    const blogsPreview = () => (
+        <div id='preview'>
+            {blogs.map( (blog,id) =>
+                <p key={id}>{blog.title} {blog.author}</p>
+            )}
+        </div>
+    )
+
     if ( user ) {
         return (
             <div className="App">
                 <h2>blogs</h2>
                 {notificationText()}
-                <p>Hello {user.name}!</p>
+                <p>{user.name} logged in</p>
+                {blogs.length > 0 && blogsPreview()}
             </div>
         )
     } else {
