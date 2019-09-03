@@ -10,3 +10,8 @@
   border-radius: 3px;
   padding: 3px;
 }
+
+p {
+  margin-top: 2px;
+  margin-bottom: 2px;
+}

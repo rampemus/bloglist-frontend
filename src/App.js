@@ -3,6 +3,7 @@ import loginService from './services/login'
 import blogsService from './services/blogs'
 import Blog from './components/Blog'
 import BlogForm from './components/BlogForm'
+import Togglable from './components/Togglable'
 import './app.css'
 
 function App(props) {
@@ -31,15 +32,12 @@ function App(props) {
                 setNotification({ message: '', error:false })
             }, notification.message.length*100)
         }
-        console.log('useEffect for notification')
     },[notification])
 
     const updateBlogs = () => {
-        console.log('updating blogs!!!')
         blogsService.getAll()
             .then(response => {
                 setBlogs(response)
-                console.log('data:',response)
             })
     }
 
@@ -120,8 +118,9 @@ function App(props) {
                 <h2>blogs</h2>
                 {notificationText()}
                 <p>{user.name} logged in <button onClick={handleLogout} type='logout'>logout</button></p>
-                <h2>create blog</h2>
-                <BlogForm updateBlogs={updateBlogs} setNotification={setNotification}/>
+                <Togglable buttonLabel='create blog'>
+                    <BlogForm updateBlogs={updateBlogs} setNotification={setNotification}/>
+                </Togglable>
                 {blogs.length > 0 && blogsPreview()}
             </div>
         )
