@@ -8,9 +8,9 @@ const getAll = () => {
   return request.then(response => response.data)
 }
 
-const createBlog = (title, author, url, userToken) => {
-    // const request = axios.post({ })
-    console.log('now need to send ', title, author, url, userToken)
+const createBlog = (title, author, url) => {
+
+    const userToken = JSON.parse(window.localStorage.getItem('loggedBlogsUser')).token
 
     const data = {
         title: title,
@@ -29,4 +29,24 @@ const createBlog = (title, author, url, userToken) => {
     return request.then(response => response.data)
 }
 
-export default { getAll, createBlog }
+const setLikes = (blogId, likes) => {
+
+    const requestChanges = {
+        likes: likes
+    }
+
+    const userToken = JSON.parse(window.localStorage.getItem('loggedBlogsUser')).token
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'bearer ' + userToken
+        }
+    }
+
+    console.log('we need to send:', blogId, likes)
+
+    const request = axios.put(baseUrl+'/'+blogId,requestChanges,config)
+    return request.then(response => response.data)
+}
+
+export default { getAll, createBlog, setLikes }

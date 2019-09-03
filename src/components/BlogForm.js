@@ -10,9 +10,7 @@ const BlogForm = ({ updateBlogs, setNotification }) => {
     const handleCreateBlog = (event) => {
         event.preventDefault()
 
-        const user = JSON.parse(window.localStorage.getItem('loggedBlogsUser'))
-
-        blogsService.createBlog(title, author, url, user.token)
+        blogsService.createBlog(title, author, url)
             .then( ()=>{
                 updateBlogs()
                 setNotification({ message: `a new blog ${title} by ${author} added`, error:false })

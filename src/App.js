@@ -107,7 +107,7 @@ function App(props) {
     const blogsPreview = () => (
         <div id='preview'>
             {blogs.map( (blog,id) =>
-                <Blog blog={blog} key={id}/>
+                <Blog blog={blog} setNotification={setNotification} key={id}/>
             )}
         </div>
     )
