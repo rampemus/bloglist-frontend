@@ -57,7 +57,7 @@ function App(props) {
                 setNotification({ message: 'login succesfully', error:false })
             })
             .catch(error => {
-                setNotification({ message: 'wrong credentials', error:true })
+                setNotification({ message: 'wrong username or password', error:true })
             })
     }
 

@@ -15,10 +15,10 @@ const BlogForm = ({ updateBlogs, setNotification }) => {
         blogsService.createBlog(title, author, url, user.token)
             .then( ()=>{
                 updateBlogs()
+                setNotification({ message: `a new blog ${title} by ${author} added`, error:false })
                 setTitle('')
                 setAuthor('')
                 setUrl('')
-                setNotification({ message: 'new blog created', error:false })
             })
             .catch( error => {
                 setNotification({ message: error.response.data.error, error:true })
