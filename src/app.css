@@ -1,0 +1,11 @@
+#notification {
+  position:absolute;
+  top:-10px;
+  position: absolute;
+  left: 30%;
+  transform: translate(-20%);
+  background-color:white;
+  border-style: solid;
+  border-width: 3px;
+  border-radius: 3px;
+}

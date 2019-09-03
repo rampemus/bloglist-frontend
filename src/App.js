@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import loginService from './services/login'
 import blogsService from './services/blogs'
-
-//TODO: logging permanent and logout option så callad: Tee kirjautumisesta "pysyvä" local storagen avulla
-//TODO: login gives user feedback
+import Blog from './components/Blog'
+import BlogForm from './components/BlogForm'
+import './app.css'
 
 function App(props) {
 
@@ -14,11 +14,7 @@ function App(props) {
     const [notification, setNotification] = useState({ message: 'no notifications', error:false })
 
     useEffect(()=>{
-        blogsService.getAll()
-            .then(response => {
-                setBlogs(response)
-                console.log('data:',response)
-            })
+        updateBlogs()
     },[])
 
     useEffect(()=>{
@@ -29,23 +25,38 @@ function App(props) {
         }
     },[])
 
+    useEffect(()=>{
+        if ( notification.message.length > 0 ) {
+            setTimeout(()=>{
+                setNotification({ message: '', error:false })
+            }, notification.message.length*100)
+        }
+        console.log('useEffect for notification')
+    },[notification])
+
+    const updateBlogs = () => {
+        console.log('updating blogs!!!')
+        blogsService.getAll()
+            .then(response => {
+                setBlogs(response)
+                console.log('data:',response)
+            })
+    }
+
     const handleLogin = (event) => {
         event.preventDefault()
 
         loginService.login(username,password)
             .then(response => {
-                console.log(response)
-
                 window.localStorage.setItem(
                     'loggedBlogsUser', JSON.stringify(response)
                 )
                 setUser(response)
                 setUsername('')
                 setPassword('')
-                setNotification({ message: '', error:false })
+                setNotification({ message: 'login succesfully', error:false })
             })
             .catch(error => {
-                console.log(error)
                 setNotification({ message: 'wrong credentials', error:true })
             })
     }
@@ -82,14 +93,23 @@ function App(props) {
             </form>
     )
 
-    const notificationText = () => (
-        <p style={notification.error ? {color: 'red'} : {color: 'green'}}>{notification.message}</p>
-    )
+    const notificationText = () => {
+        if ( notification.message.length > 0 )
+        return <p id='notification' style={notification.error ? {
+                color: 'red',
+                borderColor: 'red'
+            } : {
+                color: 'green',
+                borderColor: 'green'
+            }}>
+                {notification.message}
+            </p>
+    }
 
     const blogsPreview = () => (
         <div id='preview'>
             {blogs.map( (blog,id) =>
-                <p key={id}>{blog.title} {blog.author}</p>
+                <Blog blog={blog} key={id}/>
             )}
         </div>
     )
@@ -100,6 +120,8 @@ function App(props) {
                 <h2>blogs</h2>
                 {notificationText()}
                 <p>{user.name} logged in <button onClick={handleLogout} type='logout'>logout</button></p>
+                <h2>create blog</h2>
+                <BlogForm updateBlogs={updateBlogs} setNotification={setNotification}/>
                 {blogs.length > 0 && blogsPreview()}
             </div>
         )
