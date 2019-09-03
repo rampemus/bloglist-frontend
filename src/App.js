@@ -67,6 +67,19 @@ function App(props) {
 
     }
 
+    const notificationText = () => {
+        if ( notification.message.length > 0 )
+        return <p id='notification' style={notification.error ? {
+                color: 'red',
+                borderColor: 'red'
+            } : {
+                color: 'green',
+                borderColor: 'green'
+            }}>
+                {notification.message}
+            </p>
+    }
+
     const loginForm = () => (
             <form onSubmit={handleLogin}>
                 <div>
@@ -91,22 +104,11 @@ function App(props) {
             </form>
     )
 
-    const notificationText = () => {
-        if ( notification.message.length > 0 )
-        return <p id='notification' style={notification.error ? {
-                color: 'red',
-                borderColor: 'red'
-            } : {
-                color: 'green',
-                borderColor: 'green'
-            }}>
-                {notification.message}
-            </p>
-    }
+
 
     const blogsPreview = () => (
         <div id='preview'>
-            {blogs.map( (blog,id) =>
+            {blogs.sort((a, b) => b.likes - a.likes).map( (blog,id) =>
                 <Blog blog={blog} setNotification={setNotification} key={id}/>
             )}
         </div>
