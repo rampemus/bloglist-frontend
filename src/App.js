@@ -109,7 +109,7 @@ function App(props) {
     const blogsPreview = () => (
         <div id='preview'>
             {blogs.sort((a, b) => b.likes - a.likes).map( (blog,id) =>
-                <Blog blog={blog} setNotification={setNotification} key={id}/>
+                <Blog blog={blog} setNotification={setNotification} updateBlogs={updateBlogs} key={id}/>
             )}
         </div>
     )

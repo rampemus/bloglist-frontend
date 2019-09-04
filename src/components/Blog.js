@@ -1,12 +1,16 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import blogsService from '../services/blogs'
 
-const Blog = ({ blog, setNotification }) => {
+const Blog = ({ blog, setNotification, updateBlogs }) => {
 
     const [expanded, setExpanded] = useState(false)
     const [deleted, setDeleted] = useState(false)
 
     const [likes, setLikes] = useState(blog.likes)
+
+    useEffect(()=>{
+        setLikes(blog.likes)
+    },[blog])
 
     const style = {
         borderStyle: 'solid',
@@ -21,18 +25,22 @@ const Blog = ({ blog, setNotification }) => {
         setExpanded(!expanded)
     }
 
+    //TODO: fix error handling messages to something more describing
     const handleAddLike = (event) => {
         event.preventDefault()
 
         blogsService.setLikes(blog.id, likes+1)
             .then(response=>{
                 setLikes(likes+1)
+                setNotification({ message: `You liked ${blog.title}`, error:false })
+                updateBlogs()
             })
             .catch( error => {
                 setNotification({ message: 'like could not be added', error:true })
             })
     }
 
+    //TODO: fix error handling messages to something more describing
     const handleDelete = (event) => {
         event.preventDefault()
 
@@ -64,7 +72,7 @@ const Blog = ({ blog, setNotification }) => {
         return <div></div>
     } else {
         return <div style={style}>
-            <div onClick={toggleExpanded}>{blog.title} {blog.author}</div>
+            <div onClick={toggleExpanded}>{blog.title} by {blog.author}</div>
             { expanded ? expandedContent() : '' }
         </div>
     }

@@ -12,11 +12,11 @@ const BlogForm = ({ updateBlogs, setNotification }) => {
 
         blogsService.createBlog(title, author, url)
             .then( ()=>{
-                updateBlogs()
                 setNotification({ message: `a new blog ${title} by ${author} added`, error:false })
                 setTitle('')
                 setAuthor('')
                 setUrl('')
+                updateBlogs()
             })
             .catch( error => {
                 setNotification({ message: error.response.data.error, error:true })
