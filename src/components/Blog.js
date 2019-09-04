@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import blogsService from '../services/blogs'
 
-const Blog = ({ blog, setNotification, updateBlogs }) => {
+const Blog = ({ blog, ownedByUser, setNotification, updateBlogs }) => {
 
     const [expanded, setExpanded] = useState(false)
-    const [deleted, setDeleted] = useState(false)
 
     const [likes, setLikes] = useState(blog.likes)
 
@@ -21,7 +20,6 @@ const Blog = ({ blog, setNotification, updateBlogs }) => {
     }
 
     const toggleExpanded = () => {
-        console.log(blog)
         setExpanded(!expanded)
     }
 
@@ -44,13 +42,15 @@ const Blog = ({ blog, setNotification, updateBlogs }) => {
     const handleDelete = (event) => {
         event.preventDefault()
 
-        blogsService.deleteBlog(blog.id)
-            .then(response => {
-                setDeleted(true)
-            })
-            .catch( error => {
-                setNotification({ message: 'like could not be deleted', error:true })
-            })
+        if (window.confirm(`Do you really want to delete ${blog.title} by ${blog.author}?`)) {
+            blogsService.deleteBlog(blog.id)
+                .then(response => {
+                    updateBlogs()
+                })
+                .catch( error => {
+                    setNotification({ message: error.response.data.error, error:true })
+                })
+        }
     }
 
     const expandedContent = () => {
@@ -64,18 +64,18 @@ const Blog = ({ blog, setNotification, updateBlogs }) => {
             <p>
                 Added by {blog.user.name}
             </p>
-            <button style={{backgroundColor:'pink'}} onClick={handleDelete}>delete</button>
+            <button style={{
+                backgroundColor:'pink',
+                display: ownedByUser ? '' : 'none',
+            }} onClick={handleDelete}>delete</button>
         </div>
     }
 
-    if (deleted) {
-        return <div></div>
-    } else {
-        return <div style={style}>
-            <div onClick={toggleExpanded}>{blog.title} by {blog.author}</div>
-            { expanded ? expandedContent() : '' }
-        </div>
-    }
+
+    return <div style={style}>
+        <div onClick={toggleExpanded}>{blog.title} by {blog.author}</div>
+        { expanded ? expandedContent() : '' }
+    </div>
 }
 
 export default Blog

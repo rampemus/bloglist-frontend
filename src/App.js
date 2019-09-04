@@ -104,15 +104,20 @@ function App(props) {
             </form>
     )
 
-
-
-    const blogsPreview = () => (
-        <div id='preview'>
+    const blogsPreview = () => {
+        // console.log('blogsPreview: blogs[0].user',blogs[0].user.username,'user.id', user.username)
+        return <div id='preview'>
             {blogs.sort((a, b) => b.likes - a.likes).map( (blog,id) =>
-                <Blog blog={blog} setNotification={setNotification} updateBlogs={updateBlogs} key={id}/>
+                <Blog
+                    blog={blog}
+                    ownedByUser={blog.user.username === user.username}
+                    setNotification={setNotification}
+                    updateBlogs={updateBlogs}
+                    key={id}
+                />
             )}
         </div>
-    )
+    }
 
     if ( user ) {
         return (
