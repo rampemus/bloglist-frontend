@@ -1,8 +1,6 @@
 import axios from 'axios'
 const baseUrl = '/api/blogs'
 
-//TODO: login user can create blogs
-
 const getAll = () => {
   const request = axios.get(baseUrl)
   return request.then(response => response.data)
@@ -49,4 +47,19 @@ const setLikes = (blogId, likes) => {
     return request.then(response => response.data)
 }
 
-export default { getAll, createBlog, setLikes }
+const deleteBlog = (blogId) => {
+
+    const userToken = JSON.parse(window.localStorage.getItem('loggedBlogsUser')).token
+
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'bearer ' + userToken
+        }
+    }
+
+    const request = axios.delete(baseUrl+'/'+blogId, config)
+    return request.then( response => response.data )
+}
+
+export default { getAll, createBlog, setLikes, deleteBlog }

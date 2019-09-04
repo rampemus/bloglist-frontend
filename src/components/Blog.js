@@ -4,6 +4,7 @@ import blogsService from '../services/blogs'
 const Blog = ({ blog, setNotification }) => {
 
     const [expanded, setExpanded] = useState(false)
+    const [deleted, setDeleted] = useState(false)
 
     const [likes, setLikes] = useState(blog.likes)
 
@@ -32,6 +33,18 @@ const Blog = ({ blog, setNotification }) => {
             })
     }
 
+    const handleDelete = (event) => {
+        event.preventDefault()
+
+        blogsService.deleteBlog(blog.id)
+            .then(response => {
+                setDeleted(true)
+            })
+            .catch( error => {
+                setNotification({ message: 'like could not be deleted', error:true })
+            })
+    }
+
     const expandedContent = () => {
         return <div>
             <p>
@@ -43,13 +56,18 @@ const Blog = ({ blog, setNotification }) => {
             <p>
                 Added by {blog.user.name}
             </p>
+            <button style={{backgroundColor:'pink'}} onClick={handleDelete}>delete</button>
         </div>
     }
 
-    return <div style={style}>
-        <div onClick={toggleExpanded}>{blog.title} {blog.author}</div>
-        { expanded ? expandedContent() : '' }
-    </div>
+    if (deleted) {
+        return <div></div>
+    } else {
+        return <div style={style}>
+            <div onClick={toggleExpanded}>{blog.title} {blog.author}</div>
+            { expanded ? expandedContent() : '' }
+        </div>
+    }
 }
 
 export default Blog
