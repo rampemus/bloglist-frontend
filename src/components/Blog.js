@@ -7,7 +7,7 @@ const Blog = ({ blog, ownedByUser, setNotification, updateBlogs }) => {
 
     const [likes, setLikes] = useState(blog.likes)
 
-    useEffect(()=>{
+    useEffect( () => {
         setLikes(blog.likes)
     },[blog])
 
@@ -28,12 +28,12 @@ const Blog = ({ blog, ownedByUser, setNotification, updateBlogs }) => {
         event.preventDefault()
 
         blogsService.setLikes(blog.id, likes+1)
-            .then(response=>{
+            .then( () => {
                 setLikes(likes+1)
                 setNotification({ message: `You liked ${blog.title}`, error:false })
                 updateBlogs()
             })
-            .catch( error => {
+            .catch( () => {
                 setNotification({ message: 'like could not be added', error:true })
             })
     }
@@ -44,7 +44,7 @@ const Blog = ({ blog, ownedByUser, setNotification, updateBlogs }) => {
 
         if (window.confirm(`Do you really want to delete ${blog.title} by ${blog.author}?`)) {
             blogsService.deleteBlog(blog.id)
-                .then(response => {
+                .then( () => {
                     updateBlogs()
                 })
                 .catch( error => {

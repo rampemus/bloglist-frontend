@@ -11,7 +11,7 @@ const BlogForm = ({ updateBlogs, setNotification }) => {
         event.preventDefault()
 
         blogsService.createBlog(title, author, url)
-            .then( ()=>{
+            .then( () => {
                 setNotification({ message: `a new blog ${title} by ${author} added`, error:false })
                 setTitle('')
                 setAuthor('')

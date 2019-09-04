@@ -6,7 +6,7 @@ import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
 import './app.css'
 
-function App(props) {
+function App() {
 
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
@@ -14,11 +14,11 @@ function App(props) {
     const [blogs, setBlogs] = useState([])
     const [notification, setNotification] = useState({ message: 'no notifications', error:false })
 
-    useEffect(()=>{
+    useEffect( () => {
         updateBlogs()
     },[])
 
-    useEffect(()=>{
+    useEffect( () => {
         const loggedUserJSON = window.localStorage.getItem('loggedBlogsUser')
         if (loggedUserJSON) {
             const user = JSON.parse(loggedUserJSON)
@@ -26,9 +26,9 @@ function App(props) {
         }
     },[])
 
-    useEffect(()=>{
+    useEffect( () => {
         if ( notification.message.length > 0 ) {
-            setTimeout(()=>{
+            setTimeout(() => {
                 setNotification({ message: '', error:false })
             }, notification.message.length*100)
         }
@@ -54,7 +54,7 @@ function App(props) {
                 setPassword('')
                 setNotification({ message: 'login succesfully', error:false })
             })
-            .catch(error => {
+            .catch( () => {
                 setNotification({ message: 'wrong username or password', error:true })
             })
     }
@@ -69,7 +69,7 @@ function App(props) {
 
     const notificationText = () => {
         if ( notification.message.length > 0 )
-        return <p id='notification' style={notification.error ? {
+            return <p id='notification' style={notification.error ? {
                 color: 'red',
                 borderColor: 'red'
             } : {
@@ -81,27 +81,27 @@ function App(props) {
     }
 
     const loginForm = () => (
-            <form onSubmit={handleLogin}>
-                <div>
-                    username <input
-                        type='text'
-                        value={username}
-                        name='Username'
-                        onChange={
-                            ({ target }) => setUsername(target.value)
-                        }
-                    />
-                </div>
-                <div>
-                    password <input
-                        type='password'
-                        value={password}
-                        name='Password'
-                        onChange={({ target }) => setPassword(target.value)}
-                    />
-                </div>
-                <button type='submit'>login</button>
-            </form>
+        <form onSubmit={handleLogin}>
+            <div>
+                username <input
+                    type='text'
+                    value={username}
+                    name='Username'
+                    onChange={
+                        ({ target }) => setUsername(target.value)
+                    }
+                />
+            </div>
+            <div>
+                password <input
+                    type='password'
+                    value={password}
+                    name='Password'
+                    onChange={({ target }) => setPassword(target.value)}
+                />
+            </div>
+            <button type='submit'>login</button>
+        </form>
     )
 
     const blogsPreview = () => {
