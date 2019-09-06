@@ -84,6 +84,7 @@ function App() {
         <form onSubmit={handleLogin}>
             <div>
                 username <input
+                    id='username'
                     type='text'
                     value={username}
                     name='Username'
@@ -94,6 +95,7 @@ function App() {
             </div>
             <div>
                 password <input
+                    id='password'
                     type='password'
                     value={password}
                     name='Password'

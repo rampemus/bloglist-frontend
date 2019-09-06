@@ -73,7 +73,7 @@ const Blog = ({ blog, ownedByUser, setNotification, updateBlogs }) => {
 
 
     return <div style={style}>
-        <div onClick={toggleExpanded}>{blog.title} by {blog.author}</div>
+        <div onClick={toggleExpanded} className='BlogTitle'>{blog.title} by {blog.author}</div>
         { expanded ? expandedContent() : '' }
     </div>
 }
