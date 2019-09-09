@@ -4,12 +4,13 @@ import blogsService from './services/blogs'
 import Blog from './components/Blog'
 import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
+import useField from './hooks/useField'
 import './app.css'
 
 function App() {
 
-    const [username, setUsername] = useState('')
-    const [password, setPassword] = useState('')
+    const username = useField('text')
+    const password = useField('password')
     const [user, setUser] = useState(null)
     const [blogs, setBlogs] = useState([])
     const [notification, setNotification] = useState({ message: 'no notifications', error:false })
@@ -44,14 +45,14 @@ function App() {
     const handleLogin = (event) => {
         event.preventDefault()
 
-        loginService.login(username,password)
+        loginService.login(username.value,password.value)
             .then(response => {
                 window.localStorage.setItem(
                     'loggedBlogsUser', JSON.stringify(response)
                 )
                 setUser(response)
-                setUsername('')
-                setPassword('')
+                username.reset()
+                password.reset()
                 setNotification({ message: 'login succesfully', error:false })
             })
             .catch( () => {
@@ -85,21 +86,17 @@ function App() {
             <div>
                 username <input
                     id='username'
-                    type='text'
-                    value={username}
                     name='Username'
-                    onChange={
-                        ({ target }) => setUsername(target.value)
-                    }
+                    {...username}
+                    reset='null'
                 />
             </div>
             <div>
                 password <input
                     id='password'
-                    type='password'
-                    value={password}
                     name='Password'
-                    onChange={({ target }) => setPassword(target.value)}
+                    {...password}
+                    reset='null'
                 />
             </div>
             <button type='submit'>login</button>
