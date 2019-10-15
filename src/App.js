@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react'
+import { connect } from 'react-redux'
 import loginService from './services/login'
 import blogsService from './services/blogs'
 import Blog from './components/Blog'
 import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
+import notificationReducer from './reducers/notificationReducer'
 import useField from './hooks/useField'
 import './app.css'
 
-function App() {
+function App(props) {
 
     const username = useField('text')
     const password = useField('password')
@@ -27,13 +29,13 @@ function App() {
         }
     },[])
 
-    useEffect( () => {
-        if ( notification.message.length > 0 ) {
-            setTimeout(() => {
-                setNotification({ message: '', error:false })
-            }, notification.message.length*100)
-        }
-    },[notification])
+    // useEffect( () => {
+    //     if ( notification.message.length > 0 ) {
+    //         setTimeout(() => {
+    //             setNotification({ message: '', error:false })
+    //         }, notification.message.length*100)
+    //     }
+    // },[notification])
 
     const updateBlogs = () => {
         blogsService.getAll()
@@ -69,15 +71,15 @@ function App() {
     }
 
     const notificationText = () => {
-        if ( notification.message.length > 0 )
-            return <p id='notification' style={notification.error ? {
+        if ( props.message.length > 0 )
+            return <p id='notification' style={props.error ? {
                 color: 'red',
                 borderColor: 'red'
             } : {
                 color: 'green',
                 borderColor: 'green'
             }}>
-                {notification.message}
+                {props.message}
             </p>
     }
 
@@ -142,4 +144,11 @@ function App() {
 
 }
 
-export default App
+const mapStateToProps = (state) => {
+    return {
+        message: state.message,
+        error: state.error
+    }
+}
+
+export default connect(mapStateToProps,null)(App)
