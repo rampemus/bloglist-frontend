@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import blogsService from '../services/blogs'
+import { connect } from 'react-redux'
+import { showNotification } from '../reducers/notificationReducer'
 
-const BlogForm = ({ updateBlogs, setNotification }) => {
+const BlogForm = (props) => {
 
     const [title, setTitle] = useState('')
     const [author, setAuthor] = useState('')
@@ -12,14 +14,14 @@ const BlogForm = ({ updateBlogs, setNotification }) => {
 
         blogsService.createBlog(title, author, url)
             .then( () => {
-                setNotification({ message: `a new blog ${title} by ${author} added`, error:false })
+                props.showNotification(`a new blog ${title} by ${author} added`,false)
                 setTitle('')
                 setAuthor('')
                 setUrl('')
-                updateBlogs()
+                props.updateBlogs()
             })
             .catch( error => {
-                setNotification({ message: error.response.data.error, error:true })
+                props.showNotification(error.response.data.error,true)
             })
     }
 
@@ -55,4 +57,8 @@ const BlogForm = ({ updateBlogs, setNotification }) => {
     </form>
 }
 
-export default BlogForm
+const mapDispatchToProps = {
+    showNotification
+}
+
+export default connect(null,mapDispatchToProps)(BlogForm)

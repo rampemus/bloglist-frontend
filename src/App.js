@@ -5,7 +5,7 @@ import blogsService from './services/blogs'
 import Blog from './components/Blog'
 import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
-import notificationReducer from './reducers/notificationReducer'
+import notificationReducer, { showNotification } from './reducers/notificationReducer'
 import useField from './hooks/useField'
 import './app.css'
 
@@ -15,7 +15,6 @@ function App(props) {
     const password = useField('password')
     const [user, setUser] = useState(null)
     const [blogs, setBlogs] = useState([])
-    const [notification, setNotification] = useState({ message: 'no notifications', error:false })
 
     useEffect( () => {
         updateBlogs()
@@ -55,10 +54,10 @@ function App(props) {
                 setUser(response)
                 username.reset()
                 password.reset()
-                setNotification({ message: 'login succesfully', error:false })
+                props.showNotification( 'login succesfully', false ) //like this
             })
             .catch( () => {
-                setNotification({ message: 'wrong username or password', error:true })
+                props.showNotification( 'wrong username or password', true )
             })
     }
 
@@ -112,7 +111,6 @@ function App(props) {
                 <Blog
                     blog={blog}
                     ownedByUser={blog.user.username === user.username}
-                    setNotification={setNotification}
                     updateBlogs={updateBlogs}
                     key={id}
                 />
@@ -127,7 +125,7 @@ function App(props) {
                 {notificationText()}
                 <p>{user.name} logged in <button onClick={handleLogout} type='logout'>logout</button></p>
                 <Togglable buttonLabel='create blog'>
-                    <BlogForm updateBlogs={updateBlogs} setNotification={setNotification}/>
+                    <BlogForm updateBlogs={updateBlogs}/>
                 </Togglable>
                 {blogs.length > 0 && blogsPreview()}
             </div>
@@ -141,7 +139,6 @@ function App(props) {
             </div>
         )
     }
-
 }
 
 const mapStateToProps = (state) => {
@@ -151,4 +148,8 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps,null)(App)
+const mapDispatchToProps = {
+    showNotification
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(App)

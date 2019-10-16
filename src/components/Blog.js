@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react'
+import { connect } from 'react-redux'
 import blogsService from '../services/blogs'
+import { showNotification } from '../reducers/notificationReducer'
 
-const Blog = ({ blog, ownedByUser, setNotification, updateBlogs }) => {
+const Blog = (props) => {
+    const { blog, ownedByUser, updateBlogs } = props
 
     const [expanded, setExpanded] = useState(false)
 
@@ -30,11 +33,11 @@ const Blog = ({ blog, ownedByUser, setNotification, updateBlogs }) => {
         blogsService.setLikes(blog.id, likes+1)
             .then( () => {
                 setLikes(likes+1)
-                setNotification({ message: `You liked ${blog.title}`, error:false })
+                props.showNotification(`You liked ${blog.title}`, false)
                 updateBlogs()
             })
             .catch( () => {
-                setNotification({ message: 'like could not be added', error:true })
+                props.showNotification('like could not be added',true)
             })
     }
 
@@ -46,9 +49,10 @@ const Blog = ({ blog, ownedByUser, setNotification, updateBlogs }) => {
             blogsService.deleteBlog(blog.id)
                 .then( () => {
                     updateBlogs()
+                    props.showNotification(`${blog.title} was deleted succesfully`,false)
                 })
                 .catch( error => {
-                    setNotification({ message: error.response.data.error, error:true })
+                    props.showNotification(error.response.data.error, true)
                 })
         }
     }
@@ -78,4 +82,9 @@ const Blog = ({ blog, ownedByUser, setNotification, updateBlogs }) => {
     </div>
 }
 
-export default Blog
+
+const mapDispatchToProps = {
+    showNotification
+}
+
+export default connect(null,mapDispatchToProps)(Blog)
