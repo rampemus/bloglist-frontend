@@ -1,6 +1,6 @@
 //import blogsService from '../services/blogs'
 
-export const initBlogs = [
+const initState = [
     {
         author: '...',
         id: 'noid',
@@ -16,7 +16,7 @@ export const initBlogs = [
     }
 ]
 
-const blogsReducer = (state = initBlogs, action) => {
+const blogsReducer = (state = initState, action) => {
     switch (action.type) {
     case 'UPDATE_BLOGS': {
         console.log('In reducer:', action.data)

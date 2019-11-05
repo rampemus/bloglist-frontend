@@ -4,13 +4,15 @@ import { createStore, combineReducers } from 'redux'
 import { Provider } from 'react-redux'
 import notificationReducer from './reducers/notificationReducer'
 import blogsReducer from './reducers/blogsReducer'
+import userReducer from './reducers/userReducer'
 import ReactDOM from 'react-dom'
 import App from './App'
 
 const store = createStore(
     combineReducers({
         notification: notificationReducer,
-        blogs: blogsReducer
+        blogs: blogsReducer,
+        user: userReducer
     }),
     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 )

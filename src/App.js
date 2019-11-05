@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import loginService from './services/login'
 import blogsService from './services/blogs'
@@ -7,24 +7,24 @@ import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
 import { showNotification } from './reducers/notificationReducer'
 import { setBlogs } from './reducers/blogsReducer'
+import { setUser } from './reducers/userReducer'
 import useField from './hooks/useField'
 import './app.css'
 
-function App(props) {
+const App = (props) => {
 
     const username = useField('text')
     const password = useField('password')
-    const [user, setUser] = useState(null)
 
     useEffect( () => {
         updateBlogs()
-    },[])
+    }, [])
 
     useEffect( () => {
         const loggedUserJSON = window.localStorage.getItem('loggedBlogsUser')
         if (loggedUserJSON) {
             const user = JSON.parse(loggedUserJSON)
-            setUser(user)
+            props.setUser(user)
         }
     },[])
 
@@ -43,7 +43,7 @@ function App(props) {
                 window.localStorage.setItem(
                     'loggedBlogsUser', JSON.stringify(response)
                 )
-                setUser(response)
+                props.setUser(response)
                 username.reset()
                 password.reset()
                 props.showNotification( 'login succesfully', false ) //like this
@@ -57,7 +57,7 @@ function App(props) {
         event.preventDefault()
 
         window.localStorage.removeItem('loggedBlogsUser')
-        setUser(null)
+        props.setUser(null)
 
     }
 
@@ -102,7 +102,7 @@ function App(props) {
             {props.blogs.sort((a, b) => b.likes - a.likes).map( (blog,id) =>
                 <Blog
                     blog={blog}
-                    ownedByUser={blog.user.username === user.username}
+                    ownedByUser={blog.user.username === props.user.username}
                     updateBlogs={updateBlogs}
                     key={id}
                 />
@@ -110,12 +110,12 @@ function App(props) {
         </div>
     }
 
-    if ( user ) {
+    if ( props.user ) {
         return (
             <div className="App">
                 <h2>blogs</h2>
                 {notificationText()}
-                <p>{user.name} logged in <button onClick={handleLogout} type='logout'>logout</button></p>
+                <p>{props.user.name} logged in <button onClick={handleLogout} type='logout'>logout</button></p>
                 <Togglable buttonLabel='create blog'>
                     <BlogForm updateBlogs={updateBlogs}/>
                 </Togglable>
@@ -137,13 +137,15 @@ const mapStateToProps = (state) => {
     return {
         message: state.notification.message,
         error: state.notification.error,
-        blogs: state.blogs
+        blogs: state.blogs,
+        user: state.user
     }
 }
 
 const mapDispatchToProps = {
     showNotification,
-    setBlogs
+    setBlogs,
+    setUser
 }
 
 export default connect(mapStateToProps,mapDispatchToProps)(App)
