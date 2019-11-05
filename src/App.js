@@ -5,7 +5,8 @@ import blogsService from './services/blogs'
 import Blog from './components/Blog'
 import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
-import notificationReducer, { showNotification } from './reducers/notificationReducer'
+import { showNotification } from './reducers/notificationReducer'
+import { setBlogs } from './reducers/blogsReducer'
 import useField from './hooks/useField'
 import './app.css'
 
@@ -14,7 +15,6 @@ function App(props) {
     const username = useField('text')
     const password = useField('password')
     const [user, setUser] = useState(null)
-    const [blogs, setBlogs] = useState([])
 
     useEffect( () => {
         updateBlogs()
@@ -28,18 +28,10 @@ function App(props) {
         }
     },[])
 
-    // useEffect( () => {
-    //     if ( notification.message.length > 0 ) {
-    //         setTimeout(() => {
-    //             setNotification({ message: '', error:false })
-    //         }, notification.message.length*100)
-    //     }
-    // },[notification])
-
     const updateBlogs = () => {
         blogsService.getAll()
             .then(response => {
-                setBlogs(response)
+                props.setBlogs(response)
             })
     }
 
@@ -107,7 +99,7 @@ function App(props) {
     const blogsPreview = () => {
         // console.log('blogsPreview: blogs[0].user',blogs[0].user.username,'user.id', user.username)
         return <div id='preview'>
-            {blogs.sort((a, b) => b.likes - a.likes).map( (blog,id) =>
+            {props.blogs.sort((a, b) => b.likes - a.likes).map( (blog,id) =>
                 <Blog
                     blog={blog}
                     ownedByUser={blog.user.username === user.username}
@@ -127,7 +119,7 @@ function App(props) {
                 <Togglable buttonLabel='create blog'>
                     <BlogForm updateBlogs={updateBlogs}/>
                 </Togglable>
-                {blogs.length > 0 && blogsPreview()}
+                {props.blogs.length > 0 && blogsPreview()}
             </div>
         )
     } else {
@@ -143,13 +135,15 @@ function App(props) {
 
 const mapStateToProps = (state) => {
     return {
-        message: state.message,
-        error: state.error
+        message: state.notification.message,
+        error: state.notification.error,
+        blogs: state.blogs
     }
 }
 
 const mapDispatchToProps = {
-    showNotification
+    showNotification,
+    setBlogs
 }
 
 export default connect(mapStateToProps,mapDispatchToProps)(App)
