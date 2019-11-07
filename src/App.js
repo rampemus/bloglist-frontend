@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
 import loginService from './services/login'
+import User from './components/User'
 import blogsService from './services/blogs'
 import Users from './components/Users'
 import Blog from './components/Blog'
@@ -58,14 +59,6 @@ const App = (props) => {
             .catch( () => {
                 props.showNotification( 'wrong username or password', true )
             })
-    }
-
-    const handleLogout = (event) => {
-        event.preventDefault()
-
-        window.localStorage.removeItem('loggedBlogsUser')
-        props.setUser(null)
-
     }
 
     const notificationText = () => {
@@ -142,12 +135,6 @@ const App = (props) => {
         )
     }
 
-    const loggedInInfo = () => {
-        return (
-            <p>{props.user.name} logged in <button onClick={handleLogout} type='logout'>logout</button></p>
-        )
-    }
-
     const margin = { margin:20 }
 
     return (
@@ -159,7 +146,8 @@ const App = (props) => {
                     <Link style={margin} to="/users">users</Link>
                 </div>
                 <Route exact path="/" render={ () => home() } />
-                <Route path="/users" render={ () => <Users/> } />
+                <Route exact path="/users" render={ () => <Users/> } />
+                <Route exact path="/users/:id" render={ ({ match }) => <User id={match.params.id}/>} />
             </Router>
         </div>
     )
