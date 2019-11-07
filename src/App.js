@@ -1,10 +1,13 @@
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
 import loginService from './services/login'
 import blogsService from './services/blogs'
+import Users from './components/Users'
 import Blog from './components/Blog'
 import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
+import LoginInfo from './components/LoginInfo'
 import { showNotification } from './reducers/notificationReducer'
 import { setBlogs } from './reducers/blogsReducer'
 import { setUser } from './reducers/userReducer'
@@ -18,6 +21,8 @@ const App = (props) => {
 
     useEffect( () => {
         updateBlogs()
+        // TODO: implement thunk redux to remove this warning
+        // eslint-disable-next-line
     }, [])
 
     useEffect( () => {
@@ -26,6 +31,8 @@ const App = (props) => {
             const user = JSON.parse(loggedUserJSON)
             props.setUser(user)
         }
+        // TODO: implement thunk redux to remove this warning
+        // eslint-disable-next-line
     },[])
 
     const updateBlogs = () => {
@@ -97,7 +104,6 @@ const App = (props) => {
     )
 
     const blogsPreview = () => {
-        // console.log('blogsPreview: blogs[0].user',blogs[0].user.username,'user.id', user.username)
         return <div id='preview'>
             {props.blogs.sort((a, b) => b.likes - a.likes).map( (blog,id) =>
                 <Blog
@@ -110,19 +116,23 @@ const App = (props) => {
         </div>
     }
 
-    if ( props.user ) {
+    const home = () => {
+        if ( !props.user ) {
+            return login()
+        }
         return (
             <div className="App">
                 <h2>blogs</h2>
-                {notificationText()}
-                <p>{props.user.name} logged in <button onClick={handleLogout} type='logout'>logout</button></p>
+                <LoginInfo />
                 <Togglable buttonLabel='create blog'>
-                    <BlogForm updateBlogs={updateBlogs}/>
+                    <BlogForm updateBlogs={updateBlogs} />
                 </Togglable>
                 {props.blogs.length > 0 && blogsPreview()}
             </div>
         )
-    } else {
+    }
+
+    const login = () => {
         return (
             <div className="App">
                 <h2>log in to application</h2>
@@ -131,6 +141,28 @@ const App = (props) => {
             </div>
         )
     }
+
+    const loggedInInfo = () => {
+        return (
+            <p>{props.user.name} logged in <button onClick={handleLogout} type='logout'>logout</button></p>
+        )
+    }
+
+    const margin = { margin:20 }
+
+    return (
+        <div>
+            {notificationText()}
+            <Router>
+                <div>
+                    <Link style={margin} to="/">home</Link>
+                    <Link style={margin} to="/users">users</Link>
+                </div>
+                <Route exact path="/" render={ () => home() } />
+                <Route path="/users" render={ () => <Users/> } />
+            </Router>
+        </div>
+    )
 }
 
 const mapStateToProps = (state) => {
