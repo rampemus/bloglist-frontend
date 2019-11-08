@@ -6,6 +6,15 @@ const getAll = () => {
     return request.then(response => response.data)
 }
 
+const getBlog = (id) => {
+    const request = axios.get(`${baseUrl}/${id}`)
+    console.log('sending request to ', `${baseUrl}/${id}`)
+    return request.then(response => {
+        console.log('got answer', response.data)
+        return response.data
+    })
+}
+
 const createBlog = (title, author, url) => {
 
     const userToken = JSON.parse(window.localStorage.getItem('loggedBlogsUser')).token
@@ -62,4 +71,4 @@ const deleteBlog = (blogId) => {
     return request.then( response => response.data )
 }
 
-export default { getAll, createBlog, setLikes, deleteBlog }
+export default { getAll, getBlog, createBlog, setLikes, deleteBlog }

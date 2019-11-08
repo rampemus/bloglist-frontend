@@ -5,8 +5,8 @@ import loginService from './services/login'
 import User from './components/User'
 import blogsService from './services/blogs'
 import Users from './components/Users'
-import Blog from './components/Blog'
 import BlogForm from './components/BlogForm'
+import Blog from './components/Blog'
 import Togglable from './components/Togglable'
 import LoginInfo from './components/LoginInfo'
 import { showNotification } from './reducers/notificationReducer'
@@ -14,6 +14,7 @@ import { setBlogs } from './reducers/blogsReducer'
 import { setUser } from './reducers/userReducer'
 import useField from './hooks/useField'
 import './app.css'
+
 
 const App = (props) => {
 
@@ -98,13 +99,18 @@ const App = (props) => {
 
     const blogsPreview = () => {
         return <div id='preview'>
-            {props.blogs.sort((a, b) => b.likes - a.likes).map( (blog,id) =>
-                <Blog
-                    blog={blog}
-                    ownedByUser={blog.user.username === props.user.username}
-                    updateBlogs={updateBlogs}
-                    key={id}
-                />
+            {props.blogs.sort((a, b) => b.likes - a.likes).map( (blog,id) =>             
+                <Link key={`link${id}`} to={`/blogs/${blog.id}`}>
+                    <p key={`blogli${id}`}>
+                        {blog.title} by {blog.author}
+                    </p>
+                </Link>
+                // <BlogOld
+                //     blog={blog}
+                //     ownedByUser={blog.user.username === props.user.username}
+                //     updateBlogs={updateBlogs}
+                //     key={id}
+                // />
             )}
         </div>
     }
@@ -148,6 +154,7 @@ const App = (props) => {
                 <Route exact path="/" render={ () => home() } />
                 <Route exact path="/users" render={ () => <Users/> } />
                 <Route exact path="/users/:id" render={ ({ match }) => <User id={match.params.id}/>} />
+                <Route exact path="/blogs/:id" render={ ({ match }) => <Blog id={match.params.id}/>} />
             </Router>
         </div>
     )

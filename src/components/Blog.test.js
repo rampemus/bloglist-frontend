@@ -1,7 +1,7 @@
 import React from 'react'
 import '@testing-library/jest-dom/extend-expect'
 import { render, cleanup, fireEvent } from '@testing-library/react'
-import Blog from './Blog'
+import BlogOld from './BlogOld'
 
 afterEach(cleanup)
 
@@ -30,7 +30,7 @@ test('renders minimal content', () => {
     const mockUpdateBlogs = jest.fn()
 
     const component = render(
-        <Blog
+        <BlogOld
             blog={blog}
             ownedByUser={true}
             setNotification={mockSetNotification}
@@ -55,7 +55,7 @@ test('expands when title is clicked', () => {
     const mockUpdateBlogs = jest.fn()
 
     const component = render(
-        <Blog
+        <BlogOld
             blog={blog}
             ownedByUser={true}
             setNotification={mockSetNotification}

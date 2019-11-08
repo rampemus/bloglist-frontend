@@ -6,6 +6,8 @@ const User = (props) => {
 
     useEffect(() => {
         usersService.getUser(props.id).then(response => setUser(response))
+        // TODO: implement thunk redux to remove this warning
+        // eslint-disable-next-line
     }, [])
 
     const [user, setUser] = useState({
@@ -28,11 +30,13 @@ const User = (props) => {
             <h1>{user.username}</h1>
             <LoginInfo />
             <p>{user.name}</p>
-            {user.blogs.map((blog,id) => {
-                return(
-                    <p key={`title${id}`}>{blog.title}</p>
-                )
-            })}
+            <ul>
+                {user.blogs.map((blog, id) => {
+                    return (
+                        <li key={`title${id}`}>{blog.title}</li>
+                    )
+                })}
+            </ul>
         </div>
     )
 }
