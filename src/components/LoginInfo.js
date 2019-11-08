@@ -11,13 +11,17 @@ const LoginInfo = (props) => {
         props.setUser(null)
     }
 
+    const margin = {
+        margin: 10
+    }
+
     if (props.user) {
         return (
-            <p>{props.user.name} logged in <button onClick={handleLogout} type='logout'>logout</button></p>
+            <div style={margin}>{props.user.name} logged in <button onClick={handleLogout} type='logout'>logout</button></div>
         )
     } else {
         return (
-            <p>You are not logged in</p>
+            <div style={margin}>You are not logged in</div>
         )
     }
 }

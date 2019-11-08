@@ -2,13 +2,19 @@
   position:absolute;
   top:40px;
   position: absolute;
-  left: 30%;
-  transform: translate(-20%);
+  left: 50%;
+  transform: translate(-50%);
   background-color:white;
   border-style: solid;
   border-width: 3px;
   border-radius: 3px;
   padding: 3px;
+}
+
+.menu {
+  display: flex;
+  align-items: center;
+  background-color: lightgrey;
 }
 
 p {

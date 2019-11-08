@@ -99,7 +99,7 @@ const App = (props) => {
 
     const blogsPreview = () => {
         return <div id='preview'>
-            {props.blogs.sort((a, b) => b.likes - a.likes).map( (blog,id) =>             
+            {props.blogs.sort((a, b) => b.likes - a.likes).map( (blog,id) =>
                 <Link key={`link${id}`} to={`/blogs/${blog.id}`}>
                     <p key={`blogli${id}`}>
                         {blog.title} by {blog.author}
@@ -122,7 +122,6 @@ const App = (props) => {
         return (
             <div className="App">
                 <h2>blogs</h2>
-                <LoginInfo />
                 <Togglable buttonLabel='create blog'>
                     <BlogForm updateBlogs={updateBlogs} />
                 </Togglable>
@@ -141,15 +140,16 @@ const App = (props) => {
         )
     }
 
-    const margin = { margin:20 }
+    const margin = { margin:10 }
 
     return (
         <div>
             {notificationText()}
             <Router>
-                <div>
-                    <Link style={margin} to="/">home</Link>
-                    <Link style={margin} to="/users">users</Link>
+                <div className="menu">
+                    <div><Link style={margin} to="/">home</Link></div>
+                    <div><Link style={margin} to="/users">users</Link></div>
+                    <LoginInfo/>
                 </div>
                 <Route exact path="/" render={ () => home() } />
                 <Route exact path="/users" render={ () => <Users/> } />

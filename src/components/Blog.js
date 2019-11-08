@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { showNotification } from '../reducers/notificationReducer'
-import LoginInfo from './LoginInfo'
 import blogsService from '../services/blogs'
 
 const Blog = (props) => {
@@ -24,7 +23,6 @@ const Blog = (props) => {
         if (props.id) {
             blogsService.getBlog(props.id).then(response => setBlog(response))
         }
-        
         // TODO: implement thunk redux to remove this warning
         // eslint-disable-next-line
     }, [])
@@ -46,7 +44,6 @@ const Blog = (props) => {
     return(
         <div>
             <h1>{blog.title}</h1>
-            <LoginInfo />
             <p>{blog.author}</p>
             <p>{blog.url}</p>
             <p>{blog.likes} likes <button onClick={handleAddLike}>like</button></p>

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import usersService from '../services/users'
-import LoginInfo from './LoginInfo'
 
 const User = (props) => {
 
@@ -28,7 +27,6 @@ const User = (props) => {
     return(
         <div>
             <h1>{user.username}</h1>
-            <LoginInfo />
             <p>{user.name}</p>
             <ul>
                 {user.blogs.map((blog, id) => {

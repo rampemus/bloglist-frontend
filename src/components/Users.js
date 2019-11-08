@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import LoginInfo from './LoginInfo'
 import usersService from '../services/users'
 
 const Users = () => {
@@ -23,7 +22,6 @@ const Users = () => {
     return(
         <div>
             <h2>users</h2>
-            <LoginInfo />
             <table>
                 <thead>
                     <tr>
