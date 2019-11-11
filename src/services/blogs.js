@@ -54,6 +54,15 @@ const setLikes = (blogId, likes) => {
     return request.then(response => response.data)
 }
 
+const addComment = (blogId, comment) => {
+    const requestChanges = {
+        message: comment
+    }
+
+    const request = axios.post(`${baseUrl}/${blogId}/comments`, requestChanges)
+    return request.then(response => response.data)
+}
+
 const deleteBlog = (blogId) => {
 
     const userToken = JSON.parse(window.localStorage.getItem('loggedBlogsUser')).token
@@ -69,4 +78,4 @@ const deleteBlog = (blogId) => {
     return request.then( response => response.data )
 }
 
-export default { getAll, getBlog, createBlog, setLikes, deleteBlog }
+export default { getAll, getBlog, createBlog, setLikes, addComment, deleteBlog }

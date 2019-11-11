@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { showNotification } from '../reducers/notificationReducer'
 import blogsService from '../services/blogs'
+import BlogCommentFrom from './BlogCommentForm'
 
 const Blog = (props) => {
 
@@ -21,15 +22,19 @@ const Blog = (props) => {
     })
 
     useEffect(() => {
+        updateBlogData()
+        // TODO: implement thunk redux to remove this warning
+        // eslint-disable-next-line
+    }, [])
+
+    const updateBlogData = () => {
         if (props.id) {
             blogsService.getBlog(props.id).then((response) => {
                 setBlog(response)
                 // console.log('blogsService gives response: ', response.comments)
             })
         }
-        // TODO: implement thunk redux to remove this warning
-        // eslint-disable-next-line
-    }, [])
+    }
 
     const handleAddLike = (event) => {
         event.preventDefault()
@@ -52,13 +57,14 @@ const Blog = (props) => {
             <p>{blog.url}</p>
             <p>{blog.likes} likes <button onClick={handleAddLike}>like</button></p>
             <p>added by {blog.user.name}</p>
-            <p>Comments:</p>
+            <p>comments:</p>
             <ul>
                 {blog.comments.map( (comment, id) => { return (
                     <li key={`comment${id}`}>
                         {comment}
                     </li>
                 )})}
+                <li ><BlogCommentFrom id={blog.id} updatePage={updateBlogData}/></li>
             </ul>
         </div>
     )
