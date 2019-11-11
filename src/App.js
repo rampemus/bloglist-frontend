@@ -139,7 +139,6 @@ const App = (props) => {
 
     return (
         <div>
-            
             <Router>
                 <div className="menu">
                     <Navbar>

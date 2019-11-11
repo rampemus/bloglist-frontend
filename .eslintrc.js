@@ -18,6 +18,12 @@ module.exports = {
     "plugins": [
         "react", "jest"
     ],
+    "settings": {
+        "react": {
+            "pragma": "React",
+            "version": "16.8.6"
+        }
+    },
     "rules": {
         "indent": [
             "error",
