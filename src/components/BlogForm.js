@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import blogsService from '../services/blogs'
 import { connect } from 'react-redux'
 import { showNotification } from '../reducers/notificationReducer'
-import { Form, Row, Button } from 'react-bootstrap'
+import { Form, Button } from 'react-bootstrap'
 
 const BlogForm = (props) => {
 
