@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import blogsService from '../services/blogs'
 import { connect } from 'react-redux'
 import { showNotification } from '../reducers/notificationReducer'
+import { Form, Row, Button } from 'react-bootstrap'
 
 const BlogForm = (props) => {
 
@@ -26,34 +27,34 @@ const BlogForm = (props) => {
     }
 
     return <form onSubmit={handleCreateBlog}>
-        <div>
-            title <input
+        <Form.Group>
+            <Form.Label>title</Form.Label> <input
                 type='text'
                 value={title}
                 onChange={
                     ({ target }) => setTitle(target.value)
                 }
             />
-        </div>
-        <div>
-            author <input
+        </Form.Group>
+        <Form.Group>
+            <Form.Label>author</Form.Label> <input
                 type='text'
                 value={author}
                 onChange={
                     ({ target }) => setAuthor(target.value)
                 }
             />
-        </div>
-        <div>
-            url <input
+        </Form.Group>
+        <Form.Group>
+            <Form.Label>url</Form.Label> <input
                 type='text'
                 value={url}
                 onChange={
                     ({ target }) => setUrl(target.value)
                 }
             />
-        </div>
-        <button type='submit'>create</button>
+        </Form.Group>
+        <Button variant="primary"  type='submit'>create</Button>
     </form>
 }
 

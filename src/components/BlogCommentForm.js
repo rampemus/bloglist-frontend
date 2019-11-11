@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import blogsService from '../services/blogs'
 import { connect } from 'react-redux'
 import { showNotification } from '../reducers/notificationReducer'
+import { InputGroup , Button } from 'react-bootstrap'
 
 const BlogCommentForm = (props) => {
 
@@ -22,10 +23,12 @@ const BlogCommentForm = (props) => {
 
     return(
         <form onSubmit={handleAddComment}>
-            <input type='text' value={comment} onChange={
-                ({ target }) => setComment(target.value)
-            } />
-            <button type='submit'>add</button>
+            <InputGroup.Prepend>
+                <input type='text' value={comment} onChange={
+                    ({ target }) => setComment(target.value)
+                } />
+                <Button variant="primary" type='submit'>add</Button>
+            </InputGroup.Prepend>
         </form>
     )
 }

@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { showNotification } from '../reducers/notificationReducer'
 import blogsService from '../services/blogs'
 import BlogCommentFrom from './BlogCommentForm'
+import { Button } from 'react-bootstrap'
 
 const Blog = (props) => {
 
@@ -55,7 +56,7 @@ const Blog = (props) => {
             <h1>{blog.title}</h1>
             <p>{blog.author}</p>
             <p>{blog.url}</p>
-            <p>{blog.likes} likes <button onClick={handleAddLike}>like</button></p>
+            <p>{blog.likes} likes <Button variant="primary" onClick={handleAddLike}>like</Button></p>
             <p>added by {blog.user.name}</p>
             <p>comments:</p>
             <ul>

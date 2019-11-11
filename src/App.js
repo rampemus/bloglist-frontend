@@ -14,6 +14,7 @@ import { setBlogs } from './reducers/blogsReducer'
 import { setUser } from './reducers/userReducer'
 import useField from './hooks/useField'
 import './app.css'
+import { Navbar, NavItem, Alert, Form, Button, Row } from 'react-bootstrap'
 
 
 const App = (props) => {
@@ -64,36 +65,30 @@ const App = (props) => {
 
     const notificationText = () => {
         if ( props.message.length > 0 )
-            return <p id='notification' style={props.error ? {
-                color: 'red',
-                borderColor: 'red'
-            } : {
-                color: 'green',
-                borderColor: 'green'
-            }}>
+            return <Alert id='notification' variant={props.error ? 'danger' : 'success'}>
                 {props.message}
-            </p>
+            </Alert>
     }
 
     const loginForm = () => (
         <form onSubmit={handleLogin}>
-            <div>
-                username <input
+            <Form.Group as={Row}>
+                <Form.Label column sm={2}>username</Form.Label> <input
                     id='username'
                     name='Username'
                     {...username}
                     reset='null'
                 />
-            </div>
-            <div>
-                password <input
+            </Form.Group>
+            <Form.Group as={Row}>
+                <Form.Label column sm={2}>password</Form.Label> <input
                     id='password'
                     name='Password'
                     {...password}
                     reset='null'
                 />
-            </div>
-            <button type='submit'>login</button>
+            </Form.Group>
+            <Button variant="primary" type='submit'>login</Button>
         </form>
     )
 
@@ -122,7 +117,7 @@ const App = (props) => {
         return (
             <div className="App">
                 <h2>blogs</h2>
-                <Togglable buttonLabel='create blog'>
+                <Togglable buttonLabel='create blog' className='container'>
                     <BlogForm updateBlogs={updateBlogs} />
                 </Togglable>
                 {props.blogs.length > 0 && blogsPreview()}
@@ -144,17 +139,23 @@ const App = (props) => {
 
     return (
         <div>
-            {notificationText()}
+            
             <Router>
                 <div className="menu">
-                    <div><Link style={margin} to="/">home</Link></div>
-                    <div><Link style={margin} to="/users">users</Link></div>
-                    <LoginInfo/>
+                    <Navbar>
+                        <Navbar.Brand>Blog-app</Navbar.Brand>
+                        <NavItem><Link style={margin} to="/">home</Link></NavItem>
+                        <NavItem><Link style={margin} to="/users">users</Link></NavItem>
+                        <LoginInfo />
+                    </Navbar>
                 </div>
-                <Route exact path="/" render={ () => home() } />
-                <Route exact path="/users" render={ () => <Users/> } />
-                <Route exact path="/users/:id" render={ ({ match }) => <User id={match.params.id}/>} />
-                <Route exact path="/blogs/:id" render={ ({ match }) => <Blog id={match.params.id}/>} />
+                {notificationText()}
+                <div className="container">
+                    <Route exact path="/" render={() => home()} />
+                    <Route exact path="/users" render={() => <Users />} />
+                    <Route exact path="/users/:id" render={({ match }) => <User id={match.params.id} />} />
+                    <Route exact path="/blogs/:id" render={({ match }) => <Blog id={match.params.id} />} />
+                </div>
             </Router>
         </div>
     )

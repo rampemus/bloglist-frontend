@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
+import { Button, Form } from 'react-bootstrap'
 
 const Togglable = (props) => {
     const [visible, setVisible] = useState(false)
@@ -8,7 +9,8 @@ const Togglable = (props) => {
     const showWhenVisible = {
         display: visible ? '' : 'none',
         marginBottom:'10px',
-        padding: '2px',
+        padding: '10px',
+        borderRadius: '5px',
         backgroundColor: 'lightgrey'
     }
 
@@ -18,14 +20,14 @@ const Togglable = (props) => {
 
     return (
         <div>
-            <div style={hideWhenVisible}>
-                <button onClick={toggleVisibility}>{props.buttonLabel}</button>
-            </div>
-            <div style={showWhenVisible}>
-                <div style={{ textAlign:'center' }}>Create new blog</div>
+            <Form.Group style={hideWhenVisible}>
+                <Button variant="primary" onClick={toggleVisibility}>{props.buttonLabel}</Button>
+            </Form.Group>
+            <Form.Group style={showWhenVisible}>
+                <Form.Label style={{ textAlign: 'center' }}>Create new blog</Form.Label>
                 {props.children}
-                <button onClick={toggleVisibility}>cancel</button>
-            </div>
+                <Button variant="secondary" onClick={toggleVisibility}>cancel</Button>
+            </Form.Group>
         </div>
     )
 }
