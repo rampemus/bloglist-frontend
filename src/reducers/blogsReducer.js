@@ -19,7 +19,6 @@ const initState = [
 const blogsReducer = (state = initState, action) => {
     switch (action.type) {
     case 'UPDATE_BLOGS': {
-        console.log('In reducer:', action.data)
         return action.data
     }
     default: return state

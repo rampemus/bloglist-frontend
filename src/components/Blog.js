@@ -16,12 +16,16 @@ const Blog = (props) => {
             name: '...',
             id: 'nouserid'
         },
-        id: 'noblogid'
+        id: 'noblogid',
+        comments: []
     })
 
     useEffect(() => {
         if (props.id) {
-            blogsService.getBlog(props.id).then(response => setBlog(response))
+            blogsService.getBlog(props.id).then((response) => {
+                setBlog(response)
+                // console.log('blogsService gives response: ', response.comments)
+            })
         }
         // TODO: implement thunk redux to remove this warning
         // eslint-disable-next-line
@@ -47,7 +51,15 @@ const Blog = (props) => {
             <p>{blog.author}</p>
             <p>{blog.url}</p>
             <p>{blog.likes} likes <button onClick={handleAddLike}>like</button></p>
-            <p>added by</p>
+            <p>added by {blog.user.name}</p>
+            <p>Comments:</p>
+            <ul>
+                {blog.comments.map( (comment, id) => { return (
+                    <li key={`comment${id}`}>
+                        {comment}
+                    </li>
+                )})}
+            </ul>
         </div>
     )
 }

@@ -8,9 +8,7 @@ const getAll = () => {
 
 const getBlog = (id) => {
     const request = axios.get(`${baseUrl}/${id}`)
-    console.log('sending request to ', `${baseUrl}/${id}`)
     return request.then(response => {
-        console.log('got answer', response.data)
         return response.data
     })
 }
